@@ -1,11 +1,16 @@
 <template>
   <div>
-    <p v-for="article in articles" :key="article.id">
-        {{ article.created_at }}&nbsp;&nbsp;
-        {{ article.title }}
-    </p>
+    <div v-for="article in articles" :key="article.id">
+      <router-link :to="{ name: 'ArticleShow', query: { id: article.id } }">
+        <p>
+          {{ article.created_at }}&nbsp;&nbsp;
+          {{ article.title }}
+        </p>
+      </router-link>
+    </div>
   </div>
 </template>
+
 <script>
 export default {
   data () {
@@ -14,14 +19,14 @@ export default {
     }
   },
   mounted () {
-    this.$http.get('http://localhost:3000/api/articles').then((response) => {
-      console.info(response.body)
-      this.articles = response.body.articles
-    }, (response) => {
-      console.error(response)
-    })
+    this.$http.get('http://localhost:3000/api/articles')
+      .then(response => {
+        console.info(response.data)
+        this.articles = response.data.articles
+      })
+      .catch(error => {
+        console.error(error)
+      })
   }
 }
 </script>
-<style>
-</style>
